@@ -1,0 +1,88 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Catatan Kendaraan</title>
+    <link rel="stylesheet" href="style.css">
+</head>
+<body>
+    <div class="container">
+        <h1>Catatan Kendaraan</h1>
+        <form id="noteForm">
+            <label for="kode_lambung">Kode Lambung:</label>
+            <input type="text" id="kode_lambung" name="kode_lambung" required>
+
+            <label for="plat_kendaraan">Plat Kendaraan:</label>
+            <input type="text" id="plat_kendaraan" name="plat_kendaraan" required>
+
+            <label for="nama_driver">Nama Driver:</label>
+            <input type="text" id="nama_driver" name="nama_driver" required>
+
+            <label for="waktu_checker">Waktu Checker:</label>
+            <input type="text" id="waktu_checker" name="waktu_checker" required>
+
+            <label for="nomor_do">Nomor DO:</label>
+            <input type="text" id="nomor_do" name="nomor_do" required>
+
+            <button type="submit">Simpan Catatan</button>
+        </form>
+
+        <h2>Daftar Catatan</h2>
+        <table>
+            <thead>
+                <tr>
+                    <th>Kode Lambung</th>
+                    <th>Plat Kendaraan</th>
+                    <th>Nama Driver</th>
+                    <th>Waktu Checker</th>
+                    <th>Nomor DO</th>
+                    <th>Tanggal</th>
+                </tr>
+            </thead>
+            <tbody id="noteTable">
+                <!-- Catatan akan ditambahkan di sini -->
+            </tbody>
+        </table>
+
+        <button id="exportButton">Export to Excel</button>
+    </div>
+
+    <script src="xlsx.full.min.js"></script>
+    <script>
+        document.getElementById('noteForm').addEventListener('submit', function(event) {
+            event.preventDefault();
+
+            // Ambil nilai dari form
+            const kodeLambung = document.getElementById('kode_lambung').value;
+            const platKendaraan = document.getElementById('plat_kendaraan').value;
+            const namaDriver = document.getElementById('nama_driver').value;
+            const waktuChecker = document.getElementById('waktu_checker').value;
+            const nomorDO = document.getElementById('nomor_do').value;
+
+            // Ambil tanggal saat ini
+            const now = new Date();
+            const tanggal = now.toLocaleDateString();
+
+            // Buat baris baru dalam tabel
+            const table = document.getElementById('noteTable');
+            const row = table.insertRow();
+            row.insertCell(0).textContent = kodeLambung;
+            row.insertCell(1).textContent = platKendaraan;
+            row.insertCell(2).textContent = namaDriver;
+            row.insertCell(3).textContent = waktuChecker;
+            row.insertCell(4).textContent = nomorDO;
+            row.insertCell(5).textContent = tanggal;
+
+            // Reset form setelah disubmit
+            document.getElementById('noteForm').reset();
+        });
+
+        document.getElementById('exportButton').addEventListener('click', function() {
+            const table = document.getElementById('noteTable');
+            const wb = XLSX.utils.table_to_book(table, {sheet: "Sheet1"});
+            XLSX.writeFile(wb, "CatatanKendaraan.xlsx");
+        });
+    </script>
+</body>
+</html>
